@@ -57,7 +57,7 @@ flume metrics页面内的数据分为三部分:
 
 说明: 请根据实际情部署情况以及使用方式，自行调整监控项触发条件，以下报警条件只是基础监控，详细报警条件请自行调整
 
-| 监控想 | 告警触发条件 | 备注 |
+| 监控项 | 告警触发条件 | 备注 |
 |-----|-----|-----|
 |net.port.listen/port=3000|all(3)==0|最近三分钟flume进程监听的metrics http端口挂掉了，检查flume进程是否有问题|
 |ChannelFillPercentage|all(3)>90|最近三分钟flume channel空间使用率超过90%，检查sink的发送速率是否有问题|
