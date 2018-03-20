@@ -17,7 +17,7 @@ python-requests
 汇报字段
 --------------------------------
 
-flume metrics页面内的数据分为三部分: 
+flume metrics页面内的数据分为三部分:
 
 1. SOURCE：flume的数据源组件，所有收集日志的第一个到达的地方
 
@@ -25,31 +25,31 @@ flume metrics页面内的数据分为三部分:
 
 3. SINK：数据离开flume前的最后一个组件，负责从channel中取走数据，然后发送到缓存系统或者持久化数据库
 
-除去StartTime、StopTime以及ChannelCapacity(通道容量)之外，所有数据均汇报：
+除去StartTime、StopTime、Type以及ChannelCapacity(通道容量)之外，所有数据均汇报，上报的数据metric会添加相应的name前缀，并且在tag中上传flume进程的监听端口号：
 
 | metric |  tag | type | note |
 |-----|------|------|------|
-|OpenConnectionCount|FlumeName(flume agent的名称)|GAUGE|打开的连接数|
-|AppendBatchReceivedCount|FlumeName(flume agent的名称)|COUNTER|source端刚刚追加的批数量|
-|AppendBatchAcceptedCount|FlumeName(flume agent的名称)|COUNTER|追加到channel中的批数量|
-|AppendReceivedCount|FlumeName(flume agent的名称)|COUNTER|source追加目前收到的数量|
-|AppendAcceptedCount|FlumeName(flume agent的名称)|COUNTER|放入channel的event数量|
-|EventReceivedCount|FlumeName(flume agent的名称)|COUNTER|source端成功收到的event数量|
-|EventAcceptedCount|FlumeName(flume agent的名称)|COUNTER|成功放入channel的event数量|
-|ChannelFillPercentage|FlumeName(flume agent的名称)|GAUGE|通道使用比例|
-|ChannelSize|FlumeName(flume agent的名称)|GAUGE|目前在channel中的event数量|
-|EventPutSuccessCount|FlumeName(flume agent的名称)|COUNTER|成功放入channel的event数量|
-|EventPutAttemptCount|FlumeName(flume agent的名称)|COUNTER|尝试放入将event放入channel的次数|
-|EventTakeSuccessCount|FlumeName(flume agent的名称)|COUNTER|从channel中成功取走的event数量|
-|EventTakeAttemptCount|FlumeName(flume agent的名称)|COUNTER|尝试从channel中取走event的次数|
-|BatchCompleteCount|FlumeName(flume agent的名称)|COUNTER|完成的批数量|
-|ConnectionFailedCount|FlumeName(flume agent的名称)|COUNTER|连接失败数|
-|EventDrainAttemptCount|FlumeName(flume agent的名称)|COUNTER|尝试提交的event数量|
-|ConnectionCreatedCount|FlumeName(flume agent的名称)|COUNTER|创建连接数|
-|BatchEmptyCount|FlumeName(flume agent的名称)|COUNTER|批量取空的数量|
-|ConnectionClosedCount|FlumeName(flume agent的名称)|COUNTER|关闭连接数量|
-|EventDrainSuccessCount|FlumeName(flume agent的名称)|COUNTER|成功发送event的数量|
-|BatchUnderflowCount|FlumeName(flume agent的名称)|COUNTER|正处于批量处理的batch数|
+|OpenConnectionCount|port=3000|GAUGE|打开的连接数|
+|AppendBatchReceivedCount|port=3000|COUNTER|source端刚刚追加的批数量|
+|AppendBatchAcceptedCount|port=3000|COUNTER|追加到channel中的批数量|
+|AppendReceivedCount|port=3000|COUNTER|source追加目前收到的数量|
+|AppendAcceptedCount|port=3000|COUNTER|放入channel的event数量|
+|EventReceivedCount|port=3000|COUNTER|source端成功收到的event数量|
+|EventAcceptedCount|port=3000|COUNTER|成功放入channel的event数量|
+|ChannelFillPercentage|port=3000|GAUGE|通道使用比例|
+|ChannelSize|port=3000|GAUGE|目前在channel中的event数量|
+|EventPutSuccessCount|port=3000|COUNTER|成功放入channel的event数量|
+|EventPutAttemptCount|port=3000|COUNTER|尝试放入将event放入channel的次数|
+|EventTakeSuccessCount|port=3000|COUNTER|从channel中成功取走的event数量|
+|EventTakeAttemptCount|port=3000|COUNTER|尝试从channel中取走event的次数|
+|BatchCompleteCount|port=3000|COUNTER|完成的批数量|
+|ConnectionFailedCount|port=3000|COUNTER|连接失败数|
+|EventDrainAttemptCount|port=3000|COUNTER|尝试提交的event数量|
+|ConnectionCreatedCount|port=3000|COUNTER|创建连接数|
+|BatchEmptyCount|port=3000|COUNTER|批量取空的数量|
+|ConnectionClosedCount|port=3000|COUNTER|关闭连接数量|
+|EventDrainSuccessCount|port=3000|COUNTER|成功发送event的数量|
+|BatchUnderflowCount|port=3000|COUNTER|正处于批量处理的batch数|
 
 
 监控告警项设置建议
@@ -66,7 +66,7 @@ flume metrics页面内的数据分为三部分:
 
 使用方法
 --------------------------------
-1. 启动flume agent时添加java环境变量:```-Dflume.monitoring.type=http -Dflume.monitoring.port=3000```，端口可以自己指定，根据实际情况，决定是否修改```35行```的url参数
+1. 启动flume agent时添加java环境变量:```-Dflume.monitoring.type=http -Dflume.monitoring.port=3000```，端口可以自己指定，根据实际情况，决定是否修改脚本```35行，36行```的url和tag参数
 
 2. 将脚本放置到falcon-agent的plugin目录，在portal上将plugin目录绑定到相应的host group，falcon-agent通过自身的调度器执行该脚本，由falcon-agent解析脚本的标准输出，将得到监控项推送到falcon-judge进行报警阀值判断判断
 
